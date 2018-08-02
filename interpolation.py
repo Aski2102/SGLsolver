@@ -12,7 +12,7 @@ import numpy as np
 import scipy.interpolate as spip
 
 ipoints = np.array([[-2, 0], [2, 0]], dtype=float)
-iptype = 'cspline'
+iptype = 'polynomial'
 minmax = np.array([-2, 2, 10], dtype=float)
 
 # Extracting x and y values from the input file for the interpolation function
@@ -28,16 +28,17 @@ if iptype == 'linear':
     fl = spip.interp1d(x, y, kind='linear')
     PotV = fl(xnew)
 elif iptype == 'cspline':
-    if np.shape(x)[0] < 4: #For less than for points cubic interpolation isn't possible.
+    if np.shape(x)[0] < 4: #For less than four points cubic interpolation isn't possible.
         fl = spip.interp1d(x, y, kind='linear')
-        print('Less points for cubic interpolation.'
+        print('Not enough points for cubic interpolation.'
               ' ''Interpolation type changed to linear.')
         PotV = fl(xnew)
     else:
         fc = spip.interp1d(x, y, kind='cubic')
         PotV = fc(xnew)
 elif iptype == 'polynomial':
-    print('polynomial')
+    fbar = spip.BarycentricInterpolator(x, y)
+    PotV = fbar(xnew)
 else:
     print('Invalid interpolation type.')
 
