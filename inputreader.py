@@ -33,5 +33,3 @@ for ii in range(0, nip):            #interpolation points in an array
     ipoints[ii,:] = np.array(data[5+ii].split(" "), dtype=float)
 
 
-
-
