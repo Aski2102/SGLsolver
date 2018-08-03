@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """
 Solver for the eigenvalue problem
-
     This module creates and solves the eigenvalue problem for the solution of the
     schrodingerequation.
-
 @author: charlotte
 """
 
@@ -54,3 +52,14 @@ wavefuncs = np.hstack((xnew_t, eigenvec_n))
 #saving energies and wavefunctions in textdocuments
 np.savetxt("energies.dat", energie)
 np.savetxt("wavefuncs.dat", wavefuncs)
+
+# calculating related quantities
+expecx = delta*np.dot(xnew, eigenvec_n**2)
+expecx2 = delta*np.dot(xnew**2, eigenvec_n**2)
+uncer = np.sqrt(expecx2 - expecx**2)
+
+# creating matrix and saving it in expvalues.dat
+expvalues = np.hstack((np.reshape(expecx,(len(eigenval), 1)),
+                      np.reshape(uncer,(len(eigenval), 1))))
+
+np.savetxt("expvalues.dat", expvalues)
