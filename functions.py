@@ -13,6 +13,18 @@ import scipy.interpolate as spip
 
 
 def inputreader():
+    """Reads input file and saves relevant variables.
+
+    Args:
+
+    Returns:
+        mass: mass of the particle
+        minmax: minimum and maximum x value and number of steps
+        evalmaxmin: first and last eigenvalue
+        iptype: type of interpolation
+        ipoints: sample points as array
+    """
+
     inputfile = open("schrodinger1.inp", "r")
     data = inputfile.readlines()  # reading input file
     inputfile.close()
@@ -35,11 +47,22 @@ def inputreader():
     for ii in range(0, nip):    # interpolation points in an array
         ipoints[ii, :] = np.array(data[5+ii].split(" "), dtype=float)
 
-    return (mass, minmax, evalmaxmin, iptype, nip, ipoints)
+    return (mass, minmax, evalmaxmin, iptype, ipoints)
 
-mass, minmax, evalmaxmin, iptype, nip, ipoints = inputreader()
+# mass, minmax, evalmaxmin, iptype, ipoints = inputreader()
+
 
 def interpolation(minmax, ipoints, iptype):
+    """Interpolates the potential from sample points and saves it to document
+
+    Args:
+        minmax: minimum and maximum x value and number of steps
+        ipoints: sample points as array
+        iptype: type of interpolation
+
+    Returns:
+
+    """
 
     # Extracting x and y values from the input file
     # for the interpolation function
@@ -83,6 +106,16 @@ def interpolation(minmax, ipoints, iptype):
 
 
 def eigensolver(evalmaxmin, mass):
+    """Solves the schrodinger problem and calculates derivated quantities
+
+    Args:
+        evalmaxmin: first and last eigenvalue
+        mass: mass of the particle
+
+    Returns:
+
+    """
+
     inputfile = open("potential.dat", "r")
     data = inputfile.readlines()  # reading input file
     inputfile.close()
@@ -125,14 +158,13 @@ def eigensolver(evalmaxmin, mass):
 
     norm = 1 / (norm2 ** 0.5)
     eigenvec_n = np.dot(eigenvec,
-                    np.diag(np.reshape(norm, (len(eigenval), )), k=0))
+                        np.diag(np.reshape(norm, (len(eigenval), )), k=0))
 
     # creating the matrix that is supposed to be saved
     xx_t = np.reshape(xx, (N, 1))
     wavefuncs = np.hstack((xx_t, eigenvec_n))
 
-
-   # saving energies and wavefunctions in textdocuments
+    # saving energies and wavefunctions in textdocuments
     np.savetxt("energies.dat", eigenval)
     np.savetxt("wavefuncs.dat", wavefuncs)
 
@@ -142,11 +174,11 @@ def eigensolver(evalmaxmin, mass):
     uncer = np.sqrt(expecx2 - expecx**2)
 
     # creating matrix and saving it in expvalues.dat
-    expvalues = np.hstack((np.reshape(expecx,(len(eigenval), 1)),
-                           np.reshape(uncer,(len(eigenval), 1))))
+    expvalues = np.hstack((np.reshape(expecx, (len(eigenval), 1)),
+                           np.reshape(uncer, (len(eigenval), 1))))
 
     np.savetxt("expvalues.dat", expvalues)
 
-    return(wavefuncs, eigenval)
+    return()
 
-wavefuncs, eigenval = eigensolver(evalmaxmin, mass)
+# wavefuncs, eigenval = eigensolver(evalmaxmin, mass)
