@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Created on Mon Aug  6 03:05:23 2018
-Module forsolving the Schrodinger equation
+Module for solving the Schrodinger equation
 for a problem given by an input file
 
 @author: timo
@@ -12,7 +12,7 @@ import scipy as sp
 import scipy.interpolate as spip
 
 
-def inputreader():
+def _inputreader():
     """Reads input file and saves relevant variables.
 
     Args:
@@ -52,7 +52,7 @@ def inputreader():
 # mass, minmax, evalmaxmin, iptype, ipoints = inputreader()
 
 
-def interpolation(minmax, ipoints, iptype):
+def _interpolation(minmax, ipoints, iptype):
     """Interpolates the potential from sample points and saves it to document
 
     Args:
@@ -66,8 +66,8 @@ def interpolation(minmax, ipoints, iptype):
 
     # Extracting x and y values from the input file
     # for the interpolation function
-    x = ipoints[:, 0]
-    y = ipoints[:, 1]
+    xx = ipoints[:, 0]
+    yy = ipoints[:, 1]
 
     # Setting up the intervall for the interpolated potential
     xnew = np.linspace(minmax[0], minmax[1], minmax[2])
@@ -75,37 +75,37 @@ def interpolation(minmax, ipoints, iptype):
     # Depending on the type of interpolation given by the user
     # creating the interpolation function and defining the potential
     if iptype == 'linear':
-        fl = spip.interp1d(x, y, kind='linear')
-        PotV = fl(xnew)
+        fl = spip.interp1d(xx, yy, kind='linear')
+        pot = fl(xnew)
     elif iptype == 'cspline':
-        if np.shape(x)[0] < 4:
+        if np.shape(xx)[0] < 4:
             # For less than four points cubic interpolation isn't possible.
-            fl = spip.interp1d(x, y, kind='linear')
+            fl = spip.interp1d(xx, yy, kind='linear')
             print('Not enough points for cubic interpolation.'
                   ' ''Interpolation type changed to linear.')
-            PotV = fl(xnew)
+            pot = fl(xnew)
         else:
-            fc = spip.interp1d(x, y, kind='cubic')
-            PotV = fc(xnew)
+            fc = spip.interp1d(xx, yy, kind='cubic')
+            pot = fc(xnew)
     elif iptype == 'polynomial':
-        fbar = spip.BarycentricInterpolator(x, y)
-        PotV = fbar(xnew)
+        fbar = spip.BarycentricInterpolator(xx, yy)
+        pot = fbar(xnew)
     else:
         print('Invalid interpolation type.')
 
     # Changing the row vectors to column vectors and stacking them to a matrice
     xnew_t = np.reshape(xnew, (minmax[2], 1))
-    PotV_t = np.reshape(PotV, (minmax[2], 1))
+    pot_t = np.reshape(pot, (minmax[2], 1))
 
-    Potwithx = np.hstack((xnew_t, PotV_t))
+    potwithx = np.hstack((xnew_t, pot_t))
 
     # Saving the potential within a textdocument
-    np.savetxt("potential.dat", Potwithx)
+    np.savetxt("potential.dat", potwithx)
 
     return ()
 
 
-def eigensolver(evalmaxmin, mass):
+def _eigensolver(evalmaxmin, mass):
     """Solves the schrodinger problem and calculates derivated quantities
 
     Args:
@@ -121,27 +121,27 @@ def eigensolver(evalmaxmin, mass):
     inputfile.close()
 
     # variables that actually come from the other modules
-    N = np.shape(data)[0]
-    PotV = np.zeros((N, ), dtype=float)
-    xx = np.zeros((N, ), dtype=float)
-    for ii in range(0, N):    # interpolation points in an array
-        PotV[ii, ] = np.array(data[ii].split(" ")[1], dtype=float)
+    nn = np.shape(data)[0]
+    pot = np.zeros((nn, ), dtype=float)
+    xx = np.zeros((nn, ), dtype=float)
+    for ii in range(0, nn):    # interpolation points in an array
+        pot[ii, ] = np.array(data[ii].split(" ")[1], dtype=float)
         xx[ii, ] = np.array(data[ii].split(" ")[0], dtype=float)
 
-    xmax = xx[N-1, ]
+    xmax = xx[nn-1, ]
     xmin = xx[0, ]
 
     # newly defined variables for solving the eigenvalue problem
-    delta = (xmax - xmin) / (N - 1)
+    delta = (xmax - xmin) / (nn - 1)
     aa = 1/(mass*(delta)**2)
 
     # matrice diagonal and offdiagonal for the eigenvalue problem
-#    ond = aa + PotV
+#    ond = aa + pot
 #    ofd = -1/2*aa * np.ones((N-1,), dtype=float)
 
-    matrix = np.diag(aa + PotV, k=0) +\
-        np.diag(-1/2*aa * np.ones((N-1,), dtype=float), k=1) +\
-        np.diag(-1/2*aa * np.ones((N-1,), dtype=float), k=-1)
+    matrix = np.diag(aa + pot, k=0) +\
+        np.diag(-1/2*aa * np.ones((nn - 1,), dtype=float), k=1) +\
+        np.diag(-1/2*aa * np.ones((nn - 1,), dtype=float), k=-1)
 
     # solving the problem with the scipy function linalg.eigh
     eigenval, eigenvec = sp.linalg.eigh(matrix,
@@ -152,7 +152,7 @@ def eigensolver(evalmaxmin, mass):
 #                                        overwrite_b=False,
 
     # calculating the norm and the normalized eigenvectors
-    deltavec = delta * np.ones((1, N), dtype=float)
+    deltavec = delta * np.ones((1, nn), dtype=float)
     eigenvec2 = eigenvec**2
     norm2 = np.dot(deltavec, eigenvec2)
 
@@ -161,7 +161,7 @@ def eigensolver(evalmaxmin, mass):
                         np.diag(np.reshape(norm, (len(eigenval), )), k=0))
 
     # creating the matrix that is supposed to be saved
-    xx_t = np.reshape(xx, (N, 1))
+    xx_t = np.reshape(xx, (nn, 1))
     wavefuncs = np.hstack((xx_t, eigenvec_n))
 
     # saving energies and wavefunctions in textdocuments
