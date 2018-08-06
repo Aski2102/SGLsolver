@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
 Created on Mon Aug  6 03:05:23 2018
 Module forsolving the Schrodinger equation
@@ -16,7 +16,7 @@ def inputreader():
     inputfile = open("schrodinger1.inp", "r")
     data = inputfile.readlines()  # reading input file
     inputfile.close()
-    
+
     # declaring variables
 
     mass = float(data[0].split("#")[0].strip())  # mass
@@ -36,9 +36,6 @@ def inputreader():
         ipoints[ii, :] = np.array(data[5+ii].split(" "), dtype=float)
 
     return (mass, minmax, evalmaxmin, iptype, nip, ipoints)
-
-
-mass, minmax, evalmaxmin, iptype, nip, ipoints = inputreader()
 
 
 def interpolation(minmax, ipoints, iptype):
@@ -135,9 +132,18 @@ def eigensolver(evalmaxmin, mass):
    # saving energies and wavefunctions in textdocuments
     np.savetxt("energies.dat", eigenval)
     np.savetxt("wavefuncs.dat", wavefuncs)
+    
+    # calculating related quantities
+    expecx = delta*np.dot(xnew, eigenvec_n**2)
+    expecx2 = delta*np.dot(xnew**2, eigenvec_n**2)
+    uncer = np.sqrt(expecx2 - expecx**2)
+
+    # creating matrix and saving it in expvalues.dat
+    expvalues = np.hstack((np.reshape(expecx,(len(eigenval), 1)),
+                           np.reshape(uncer,(len(eigenval), 1))))
+
+    np.savetxt("expvalues.dat", expvalues)
 
     return(wavefuncs, eigenval)
 
 wavefuncs, eigenval = eigensolver(evalmaxmin, mass)
-print(eigenval)
-print(wavefuncs)
