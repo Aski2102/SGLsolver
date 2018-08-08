@@ -36,4 +36,20 @@ def SGLsolver():
 
     return()
 
+def visualizer():
+    """Visualizes the results from the SGLsolver. It reads the textdocuments of
+    potential, energies, wavefunctions and expected values and makes plotts.
+
+    Args:
+
+    Returns:
+
+    """
+    import functions.visualizer
+
+    functions.visualizer._visualizer()
+
+    return()
+
 SGLsolver()
+visualizer()

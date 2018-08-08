@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
 Solver for the eigenvalue problem
+
     This module creates and solves the eigenvalue problem for the solution of the
     schrodingerequation.
+
 @author: charlotte
 """
 

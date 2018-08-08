@@ -10,11 +10,9 @@ Read input file
 import numpy as np
 import scipy as sp
 
-inputfile = open("inputfiles/schrodinger1.inp", "r")
-
-
-
+inputfile = open("schrodinger1.inp", "r")
 data = inputfile.readlines() #reading input file
+inputfile.close()
 
 #declaring variables
 
@@ -26,11 +24,10 @@ evalmaxmin = np.array(data[2].split(" ")[0:2], dtype=float) #first and last eige
 
 iptype = data[3].split("#")[0].strip() #interpolation type
 
-nip = int(data[4].split("#")[0].strip()) #number of interpolation points
+nip = data[4].split("#")[0].strip() #number of interpolation points
 
-#ipoints = np.zeros((int(nip),2), dtype=float)
-for ii in range(0, nip):            #interpolation points in an array
-    ipoints[ii,:] = np.array(data[5+ii].split(" "), dtype=float)
-
-
+ipoints = np.zeros((int(nip),2), dtype=float)
+for ii in range(0, int(nip)):            #interpolation points in an array
+    data[5+ii] = ' '.join(data[5+ii].split())
+    ipoints[ii, :] = np.array(data[5+ii].split(" "), dtype=float)
 

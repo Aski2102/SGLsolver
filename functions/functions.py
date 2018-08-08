@@ -43,8 +43,9 @@ def _inputreader():
 
     nip = int(data[4].split("#")[0].strip())  # number of interpolation points
 
-    ipoints = np.zeros((int(nip), 2), dtype=float)
+    ipoints = np.zeros((nip, 2), dtype=float)
     for ii in range(0, nip):    # interpolation points in an array
+        data[5+ii] = ' '.join(data[5+ii].split())
         ipoints[ii, :] = np.array(data[5+ii].split(" "), dtype=float)
 
     return (mass, minmax, evalmaxmin, iptype, ipoints)
