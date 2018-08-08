@@ -68,6 +68,7 @@ def _interpolation(minmax, ipoints, iptype):
         iptype: type of interpolation
 
     Returns:
+        potwithx: array of xvalues and interpolated potential
 
     """
 
@@ -112,18 +113,23 @@ def _interpolation(minmax, ipoints, iptype):
     return (potwithx)
 
 
-def _eigensolver(evalmaxmin, mass):
+def _eigensolver(evalmaxmin, mass, directory):
     """Solves the schrodinger problem and calculates derivated quantities
 
     Args:
         evalmaxmin: first and last eigenvalue
         mass: mass of the particle
+        directory: directory of the input file
 
     Returns:
+        eigenval: eigenvalues of the given schrodingerproblem in an array
+        wavefuncs: xvalues and corresponding normalized wave functions in an
+                    array
+        expvalues: expected values and uncertainty in an array
 
     """
-
-    inputfile = open("potential.dat", "r")
+    filename = os.path.join(directory, "potential.dat")
+    inputfile = open(filename, "r")
     data = inputfile.readlines()  # reading input file
     inputfile.close()
 

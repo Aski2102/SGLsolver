@@ -30,7 +30,7 @@ def SGLsolver(directory):
     np.savetxt(os.path.join(directory, "potential.dat"), potwithx)
 
     eigenval, wavefuncs, expvalues =\
-        functions.functions._eigensolver(evalmaxmin, mass)
+        functions.functions._eigensolver(evalmaxmin, mass, directory)
     np.savetxt(os.path.join(directory, "energies.dat"), eigenval)
     np.savetxt(os.path.join(directory, "wavefuncs.dat"), wavefuncs)
     np.savetxt(os.path.join(directory, "expvalues.dat"), expvalues)
@@ -38,9 +38,9 @@ def SGLsolver(directory):
     return()
 
 
-def visualizer():
+def visualize(directory, scaling):
     """Visualizes the results from the SGLsolver. It reads the textdocuments of
-    potential, energies, wavefunctions and expected values and makes plotts.
+    potential, energies, wavefunctions and expected values and makes plots.
 
     Args:
 
@@ -49,7 +49,7 @@ def visualizer():
     """
     import functions.visualizer
 
-    functions.visualizer._visualizer()
+    functions.visualizer._visualizer(directory, scaling)
 
     return()
 

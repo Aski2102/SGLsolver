@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
 Visualizer is supposed to visiualize the graphs from the outputfiles
 of the SGLsolver
@@ -8,21 +8,24 @@ of the SGLsolver
 
 import numpy as np
 import matplotlib.pyplot as plt
+import os.path
 
 
-def _visualizer():
+def _visualizer(directory, scaling):
     """Visualizes the results from the SGLsolver. It reads the textdocuments of
     potential, energies, wavefunctions and expected values and makes plotts.
 
     Args:
+        directory: directory of input files and output file
+        scaling: scaling factor for better visualizing of the wave functions
 
     Returns:
 
     """
 
     # POTENTIAL
-
-    inputpot = open("potential.dat", "r")
+    filename = os.path.join(directory, "potential.dat")
+    inputpot = open(filename, "r")
     potdata = inputpot.readlines()  # reading input file
     inputpot.close()
 
@@ -35,8 +38,8 @@ def _visualizer():
         xx[ii, ] = np.array(potdata[ii].split(" ")[0], dtype=float)
 
     # ENERGIE
-
-    inputener = open("energies.dat", "r")
+    filename = os.path.join(directory, "energies.dat")
+    inputener = open(filename, "r")
     enerdata = inputener.readlines()  # reading input file
     inputener.close()
 
@@ -47,8 +50,8 @@ def _visualizer():
         ener[ii, ] = np.array(enerdata[ii], dtype=float)
 
     # WAVEFUNCS
-
-    inputwave = open("wavefuncs.dat", "r")
+    filename = os.path.join(directory, "wavefuncs.dat")
+    inputwave = open(filename, "r")
     wavedata = inputwave.readlines()  # reading input file
     inputwave.close()
 
@@ -60,7 +63,8 @@ def _visualizer():
                                      dtype=float)
 
     # EXPVALUES
-    inputexp = open("expvalues.dat", "r")
+    filename = os.path.join(directory, "expvalues.dat")
+    inputexp = open(filename, "r")
     expdata = inputexp.readlines()  # reading input file
     inputexp.close()
 
@@ -73,11 +77,9 @@ def _visualizer():
 
     # PLOTTING
 
-    factor = float(input('Factor for nicer dicer? '))
-
     # FIRST plot: potential, energies, wavefunctions and expected xvalues
     plt.subplot(1, 2, 1)
-    plt.title('Potential, eigenstates, <x>', fontsize=14)
+    plt.title(r'Potential, eigenstates, $\langle$x$\rangle$', fontsize=14)
 
     plt.xlabel("x [Bohr]", fontsize=14)
     plt.ylabel("Energy [Hartree]", fontsize=14)
@@ -97,7 +99,7 @@ def _visualizer():
             color = "red"
         else:
             color = "blue"
-        plt.plot(xx, factor * wave + energy, linewidth=1.0, linestyle="-",
+        plt.plot(xx, scaling * wave + energy, linewidth=1.0, linestyle="-",
                  color=color)
 
     # add expected x-value
@@ -114,7 +116,7 @@ def _visualizer():
 
     # SECOND plot: energies and uncertainty
     plt.subplot(1, 2, 2)
-    plt.title('Uncertainty', fontsize=14)
+    plt.title(r'$\sigma_x$', fontsize=18)
     plt.xlabel("[Bohr]", fontsize=14)
 
     # add energies
@@ -134,6 +136,7 @@ def _visualizer():
     plt.tick_params(axis='x', which='both', top=False)
 
     # Save the curves in a pdf-document
-    plt.savefig('curves.pdf', format='pdf')
+    filename = os.path.join(directory, 'curves.pdf')
+    plt.savefig(filename, format='pdf')
 
     return()
