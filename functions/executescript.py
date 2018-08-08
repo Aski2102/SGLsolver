@@ -6,35 +6,37 @@ Executable script for solving the schrodinger equation
 """
 
 
-def SGLsolver():
+def SGLsolver(directory):
     """Reads input file and solves the schrodinger equation for the problem.
        It saves the interpolated potential, the wavefunctions, eigenvalues,
        expected value and the uncertainty of of the x-coordinate in separate
        text documents.
 
     Args:
+        directory: directory where inputfile is saved
+        and outputfiles will be saved
 
     Returns:
 
     """
     import functions.functions
+    import os.path
+    import numpy as np
 
     mass, minmax, evalmaxmin, iptype, ipoints =\
-        functions.functions._inputreader()
+        functions.functions._inputreader(directory)
 
-    # potwithx =
-    functions.functions._interpolation(minmax, ipoints, iptype)
-    # np.savetxt("potential.dat", potwithx)
+    potwithx = functions.functions._interpolation(minmax, ipoints, iptype)
+    np.savetxt(os.path.join(directory, "potential.dat"), potwithx)
 
-    # eigenval, wavefuncs, expvalues =
-    # functions.functions._eigensolver(evalmaxmin, mass)
-#    np.savetxt("energies.dat", eigenval)
-#    np.savetxt("wavefuncs.dat", wavefuncs)
-#    np.savetxt("expvalues.dat", expvalues)
-
-    functions.functions._eigensolver(evalmaxmin, mass)
+    eigenval, wavefuncs, expvalues =\
+        functions.functions._eigensolver(evalmaxmin, mass)
+    np.savetxt(os.path.join(directory, "energies.dat"), eigenval)
+    np.savetxt(os.path.join(directory, "wavefuncs.dat"), wavefuncs)
+    np.savetxt(os.path.join(directory, "expvalues.dat"), expvalues)
 
     return()
+
 
 def visualizer():
     """Visualizes the results from the SGLsolver. It reads the textdocuments of
@@ -51,5 +53,6 @@ def visualizer():
 
     return()
 
-SGLsolver()
-visualizer()
+#directory=''
+#SGLsolver(directory)
+#visualizer()

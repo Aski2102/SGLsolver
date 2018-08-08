@@ -10,12 +10,14 @@ for a problem given by an input file
 import numpy as np
 import scipy as sp
 import scipy.interpolate as spip
+import os.path
 
 
-def _inputreader():
+def _inputreader(directory):
     """Reads input file and saves relevant variables.
 
     Args:
+        directory: directory of input file
 
     Returns:
         mass: mass of the particle
@@ -25,7 +27,11 @@ def _inputreader():
         ipoints: sample points as array
     """
 
-    inputfile = open("schrodinger1.inp", "r")
+    # creating the path for reading input file
+    file = "schrodinger1.inp"
+    filename = os.path.join(directory, file)
+
+    inputfile = open(filename, "r")
     data = inputfile.readlines()  # reading input file
     inputfile.close()
 
@@ -101,9 +107,9 @@ def _interpolation(minmax, ipoints, iptype):
     potwithx = np.hstack((xnew_t, pot_t))
 
     # Saving the potential within a textdocument
-    np.savetxt("potential.dat", potwithx)
+    # np.savetxt("potential.dat", potwithx)
 
-    return ()
+    return (potwithx)
 
 
 def _eigensolver(evalmaxmin, mass):
@@ -166,8 +172,8 @@ def _eigensolver(evalmaxmin, mass):
     wavefuncs = np.hstack((xx_t, eigenvec_n))
 
     # saving energies and wavefunctions in textdocuments
-    np.savetxt("energies.dat", eigenval)
-    np.savetxt("wavefuncs.dat", wavefuncs)
+    # np.savetxt("energies.dat", eigenval)
+    # np.savetxt("wavefuncs.dat", wavefuncs)
 
     # calculating related quantities
     expecx = delta*np.dot(xx, eigenvec_n**2)
@@ -178,8 +184,11 @@ def _eigensolver(evalmaxmin, mass):
     expvalues = np.hstack((np.reshape(expecx, (len(eigenval), 1)),
                            np.reshape(uncer, (len(eigenval), 1))))
 
-    np.savetxt("expvalues.dat", expvalues)
+    # np.savetxt("expvalues.dat", expvalues)
 
-    return()
+    return(eigenval, wavefuncs, expvalues)
 
 # wavefuncs, eigenval = eigensolver(evalmaxmin, mass)
+
+
+
