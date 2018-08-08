@@ -1,4 +1,6 @@
 .spyderworkspace
 Input.py
 functions/__pycache__/executescript.cpython-35.pyc
-functions/__pycache__/executescript.cpython-35.pyc
+functions/__pycache__/visualizer.cpython-35.pyc
+executescript.cpython-35.pyc
+visualizer.cpython-35.pyc
