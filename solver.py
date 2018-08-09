@@ -7,7 +7,7 @@ by an input file
 """
 
 import argparse
-from functions.executescript import SGLsolver
+from functions.executer import SGLsolver
 
 parser = argparse.ArgumentParser(description='Executes SGLsolver\
                                               for given input file')

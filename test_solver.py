@@ -5,19 +5,12 @@ First test try
 @author: timo
 """
 
-import functions.functions
-import numpy as np
 import os.path
 import pytest
+import numpy as np
+from functions.executer import SGLsolver
 
-#potexp1 = np.zeros((1999, 2), dtype=float)
-#potexp1[:, 0] = np.linspace(-2, 2, 1999)
-#
-#potexp2 = np.zeros((1999, 2), dtype=float)
-#potexp2[:, 0] = np.linspace(-5, 5, 1999)
-#potexp2[:, 1] = (np.linspace(-5, 5, 1999)) ** 2 / 2
-#
-
+# parametrized tests for all examples
 @pytest.mark.parametrize("directory", [
     ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/infwell'),
     ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic'),
@@ -28,11 +21,7 @@ import pytest
 def test_potential(directory):
     """Testing the potential"""
 
-    directory = '/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic'
-
-    mass, minmax, evalmaxmin, iptype, ipoints =\
-        functions.functions._inputreader(directory)
-    potwithx = functions.functions._interpolation(minmax, ipoints, iptype)
+    minmax, _, potwithx, _ = SGLsolver(directory)
 
     filename = os.path.join(directory, 'potref.dat')
 
@@ -47,16 +36,6 @@ def test_potential(directory):
     assert np.allclose(potwithx, potexp, rtol=0.01, atol=0.01,
                        equal_nan=False)
 
-##Infinite well
-#energieexp1 = np.zeros((1, 5), dtype=float)
-#for ii in range(5):
-#    energieexp1[0, ii] = np.pi ** 2 / (2 * mass *
-#                                       ((minmax[1] - minmax[0]) ** 2))\
-#                                       * ((ii + 1) ** 2)
-#    energieexp2 = np.zeros((1, 5), dtype=float)
-#    for ii in range(5):
-#        energieexp2[0, ii] = (ii + 1/2)/2
-
 
 @pytest.mark.parametrize("directory", [
     ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/infwell'),
@@ -68,16 +47,7 @@ def test_potential(directory):
 def test_energie(directory):
     """Testing the eigenvalues"""
 
-    directory = '/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic'
-
-    mass, minmax, evalmaxmin, iptype, ipoints =\
-        functions.functions._inputreader(directory)
-
-    potwithx = functions.functions._interpolation(minmax, ipoints, iptype)
-    np.savetxt(os.path.join(directory, "potential.dat"), potwithx)
-
-    eigenval, wavefuncs, expvalues =\
-        functions.functions._eigensolver(evalmaxmin, mass, directory)
+    _, evalmaxmin, _, eigenval = SGLsolver(directory)
 
     filename = os.path.join(directory, 'enerref.dat')
 
@@ -85,14 +55,13 @@ def test_energie(directory):
     data = inputfile.readlines()  # reading input file
     inputfile.close()
 
-    energieexp = np.zeros((int(evalmaxmin[1] - evalmaxmin[0] + 1), 1), dtype=float)
-    for ii in range(0, int(evalmaxmin[1] - evalmaxmin[0] + 1)):    # interpolation points in an array
+    energieexp = np.zeros((int(evalmaxmin[1] - evalmaxmin[0] + 1), 1),
+                          dtype=float)
+    for ii in range(0, int(evalmaxmin[1] - evalmaxmin[0] + 1)):
         energieexp[ii, 0] = np.array(data[ii], dtype=float)
 
-    eigenval = np.reshape(eigenval, (5, 1))
+    eigenval = np.reshape(eigenval,
+                          (int(evalmaxmin[1] - evalmaxmin[0] + 1), 1))
 
     assert np.allclose(eigenval, energieexp, rtol=0.01, atol=0.01,
                        equal_nan=False)
-
-#test_energie()
-#test_potential()

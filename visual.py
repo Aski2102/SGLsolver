@@ -7,7 +7,7 @@ It plots the potential, energies, wavefunctions and expected values.
 """
 
 import argparse
-from functions.executescript import visualize
+from functions.executer import visualize
 
 parser = argparse.ArgumentParser(description='Executes visualizer\
                                               for given input files')
