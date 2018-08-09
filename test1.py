@@ -8,59 +8,69 @@ First test try
 import functions.functions
 import numpy as np
 import os.path
+import pytest
+
+potexp1 = np.zeros((1999, 2), dtype=float)
+potexp1[:, 0] = np.linspace(-2, 2, 1999)
+
+potexp2 = np.zeros((1999, 2), dtype=float)
+potexp2[:, 0] = np.linspace(-5, 5, 1999)
+potexp2[:, 1] = (np.linspace(-5, 5, 1999)) ** 2 / 2
 
 
-def test_potential_infwell():
-    """Testing the potential of the infinite well"""
-    
+#@pytest.mark.parametrize("directory, potexp", [
+#    ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/infwell', potexp1),
+#    ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic', potexp2)])
+def test_potential():
+    """Testing the potential"""
+
     # print("Potential test: infinite well")
-    directory='/home/timo/WiProJekt/SGLsolver/inputfiles/infwell'
-    
+    directory = '/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic'
+
     mass, minmax, evalmaxmin, iptype, ipoints =\
         functions.functions._inputreader(directory)
     potwithx = functions.functions._interpolation(minmax, ipoints, iptype)
-    
-    potexp = np.zeros((1999, 2), dtype=float)
-    potexp[:, 0] = np.linspace(-2, 2, 1999)
-    
-    assert np.all(np.abs(potwithx - potexp) < 1e-2)
-    
-def test_energie_infwell():
-    """Testing the eigenvalues for the infinite well"""
-    
-    directory='/home/timo/WiProJekt/SGLsolver/inputfiles/infwell'
-    
+
+    potexp2 = np.zeros((1999, 2), dtype=float)
+    potexp2[:, 0] = np.linspace(-5, 5, 1999)
+    potexp2[:, 1] = (np.linspace(-5, 5, 1999)) ** 2 / 2
+
+    assert np.allclose(potwithx, potexp2, rtol=0.01, atol=0.01,
+                       equal_nan=False)
+
+#Infinite well
+energieexp1 = np.zeros((1, 5), dtype=float)
+for ii in range(5):
+    energieexp1[0, ii] = np.pi ** 2 / (2 * mass *
+                                       ((minmax[1] - minmax[0]) ** 2))\
+                                       * ((ii + 1) ** 2)
+
+
+#@pytest.mark.parametrize("directory, potexp", [
+#    ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/infwell', energieexp1),
+#    ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic', potexp2)])
+def test_energie():
+    """Testing the eigenvalues"""
+
+    directory = '/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic'
+
     mass, minmax, evalmaxmin, iptype, ipoints =\
         functions.functions._inputreader(directory)
 
     potwithx = functions.functions._interpolation(minmax, ipoints, iptype)
     np.savetxt(os.path.join(directory, "potential.dat"), potwithx)
-    
+
     eigenval, wavefuncs, expvalues =\
         functions.functions._eigensolver(evalmaxmin, mass, directory)
-    
-    energieexp = np.zeros((5, 1), dtype=float)
+
+    energieexp2 = np.zeros((1, 5), dtype=float)
     for ii in range(5):
-        energieexp[ii, 0] = np.pi ** 2 / (2 * mass *
-                                          ((minmax[1] - minmax[0]) ** 2))\
-                                          * ((ii + 1) ** 2)
- 
-    assert np.all(np.abs(eigenval - energieexp) < 1)
+        energieexp2[0, ii] = (ii + 1/2)/2
 
-#test_energie_infwell()
-test_potential_infwell()
+ #   eigenval = np.reshape(eigenval, (5, 1))
 
-directory='/home/timo/WiProJekt/SGLsolver/inputfiles/infwell'
+    assert np.allclose(eigenval, energieexp2, rtol=0.01, atol=0.01,
+                       equal_nan=False)
 
-mass, minmax, evalmaxmin, iptype, ipoints =\
-        functions.functions._inputreader(directory)
-potwithx = functions.functions._interpolation(minmax, ipoints, iptype)
-np.savetxt(os.path.join(directory, "potential.dat"), potwithx)
-eigenval, wavefuncs, expvalues =\
-        functions.functions._eigensolver(evalmaxmin, mass, directory)
-        
-energieexp = np.zeros((5, 1), dtype=float)
-for ii in range(5):
-    energieexp[ii, 0] = np.pi ** 2 / (2 * mass *
-                                      ((minmax[1] - minmax[0]) ** 2))\
-                                      * ((ii + 1) ** 2)
+test_energie()
+test_potential()
