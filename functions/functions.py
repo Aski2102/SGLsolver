@@ -28,7 +28,7 @@ def _inputreader(directory):
     """
 
     # creating the path for reading input file
-    file = "schrodinger1.inp"
+    file = "schrodinger.inp"
     filename = os.path.join(directory, file)
 
     inputfile = open(filename, "r")
@@ -49,8 +49,8 @@ def _inputreader(directory):
 
     nip = int(data[4].split("#")[0].strip())  # number of interpolation points
 
-    ipoints = np.zeros((nip, 2), dtype=float)
-    for ii in range(0, nip):    # interpolation points in an array
+    ipoints = np.zeros((int(nip), 2), dtype=float)
+    for ii in range(0, int(nip)):    # interpolation points in an array
         data[5+ii] = ' '.join(data[5+ii].split())
         ipoints[ii, :] = np.array(data[5+ii].split(" "), dtype=float)
 
@@ -78,7 +78,7 @@ def _interpolation(minmax, ipoints, iptype):
     yy = ipoints[:, 1]
 
     # Setting up the intervall for the interpolated potential
-    xnew = np.linspace(minmax[0], minmax[1], minmax[2])
+    xnew = np.linspace(int(minmax[0]), int(minmax[1]), int(minmax[2]))
 
     # Depending on the type of interpolation given by the user
     # creating the interpolation function and defining the potential
@@ -102,8 +102,8 @@ def _interpolation(minmax, ipoints, iptype):
         print('Invalid interpolation type.')
 
     # Changing the row vectors to column vectors and stacking them to a matrice
-    xnew_t = np.reshape(xnew, (minmax[2], 1))
-    pot_t = np.reshape(pot, (minmax[2], 1))
+    xnew_t = np.reshape(xnew, (int(minmax[2]), 1))
+    pot_t = np.reshape(pot, (int(minmax[2]), 1))
 
     potwithx = np.hstack((xnew_t, pot_t))
 
@@ -158,8 +158,8 @@ def _eigensolver(evalmaxmin, mass, directory):
 
     # solving the problem with the scipy function linalg.eigh
     eigenval, eigenvec = sp.linalg.eigh(matrix,
-                                        eigvals=(evalmaxmin[0]-1,
-                                                 evalmaxmin[1]-1))
+                                        eigvals=(int(evalmaxmin[0]-1),
+                                                 int(evalmaxmin[1]-1)))
 #                                        b=None, lower=True,
 #                                        eigvals_only=False, overwrite_a=False,
 #                                        overwrite_b=False,

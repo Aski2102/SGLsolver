@@ -4,3 +4,11 @@ functions/__pycache__/executescript.cpython-35.pyc
 functions/__pycache__/visualizer.cpython-35.pyc
 executescript.cpython-35.pyc
 visualizer.cpython-35.pyc
+.cache/
+__pycache__/test_solver.cpython-35-PYTEST.pyc
+functionsoutoforder/enerref.py
+functionsoutoforder/refpot.py
+functions/__pycache__/executescript.cpython-35.pyc
+functions/__pycache__/functions.cpython-35.pyc
+functions/__pycache__/visualizer.cpython-35.pyc
+
