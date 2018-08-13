@@ -3,18 +3,17 @@
 Executable script for solving the schrodinger equation for a problem defined
 by an input file
 
-@author: charlotte
 """
 
 import argparse
-from functions.executer import SGLsolver
+from modules.calculator import sgl_solver
 
-parser = argparse.ArgumentParser(description='Executes SGLsolver\
+PARSER = argparse.ArgumentParser(description='Executes SGLsolver\
                                               for given input file')
-parser.add_argument('-d', '--directory', default='',
+PARSER.add_argument('-d', '--directory', default='',
                     help='Choose directory of the input document\
                     (default value: .)')
 
-args = parser.parse_args()
+ARGS = PARSER.parse_args()
 
-SGLsolver(args.directory)
+sgl_solver(ARGS.directory)

@@ -3,12 +3,11 @@
 Visualizer is supposed to visiualize the graphs from the outputfiles
 of the SGLsolver
 
-@author: charlotte
 """
 
+import os.path
 import numpy as np
 import matplotlib.pyplot as plt
-import os.path
 
 
 def _visualizer(directory, scaling):
@@ -138,5 +137,24 @@ def _visualizer(directory, scaling):
     # Save the curves in a pdf-document
     filename = os.path.join(directory, 'curves.pdf')
     plt.savefig(filename, format='pdf')
+
+    return()
+
+
+def visualize(directory, scaling):
+    """Visualizes the results from the SGLsolver. It reads the textdocuments of
+    potential, energies, wavefunctions and expected values and makes plots.
+
+    Args:
+        directory: directory where inputfile is saved
+                   and outputfiles will be saved
+        scaling: scaling factor for visualization of the wavefunctions
+
+    Returns:
+
+    """
+
+    # executes private visualizer function to create the plots
+    _visualizer(directory, scaling)
 
     return()

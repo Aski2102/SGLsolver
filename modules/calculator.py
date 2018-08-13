@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 """
-Created on Mon Aug  6 03:05:23 2018
 Module for solving the Schrodinger equation
 for a problem given by an input file
 
-@author: timo
 """
 
+import os.path
 import numpy as np
 import scipy as sp
 import scipy.interpolate as spip
-import os.path
 
 
 def _inputreader(directory):
@@ -36,7 +34,6 @@ def _inputreader(directory):
     inputfile.close()
 
     # declaring variables
-
     mass = float(data[0].split("#")[0].strip())  # mass
 
     minmax = np.array(data[1].split(" ")[0:3], dtype=float)
@@ -56,8 +53,6 @@ def _inputreader(directory):
 
     return (mass, minmax, evalmaxmin, iptype, ipoints)
 
-# mass, minmax, evalmaxmin, iptype, ipoints = inputreader()
-
 
 def _interpolation(minmax, ipoints, iptype):
     """Interpolates the potential from sample points and saves it to document
@@ -72,8 +67,7 @@ def _interpolation(minmax, ipoints, iptype):
 
     """
 
-    # Extracting x and y values from the input file
-    # for the interpolation function
+    # Extracting x and y values from the input file for the interpolation
     xx = ipoints[:, 0]
     yy = ipoints[:, 1]
 
@@ -107,10 +101,7 @@ def _interpolation(minmax, ipoints, iptype):
 
     potwithx = np.hstack((xnew_t, pot_t))
 
-    # Saving the potential within a textdocument
-    # np.savetxt("potential.dat", potwithx)
-
-    return (potwithx)
+    return potwithx
 
 
 def _eigensolver(evalmaxmin, mass, directory):
@@ -137,21 +128,18 @@ def _eigensolver(evalmaxmin, mass, directory):
     nn = np.shape(data)[0]
     pot = np.zeros((nn, ), dtype=float)
     xx = np.zeros((nn, ), dtype=float)
-    for ii in range(0, nn):    # interpolation points in an array
+    for ii in range(0, nn):    # extracting x-values and potential points
         pot[ii, ] = np.array(data[ii].split(" ")[1], dtype=float)
         xx[ii, ] = np.array(data[ii].split(" ")[0], dtype=float)
 
     xmax = xx[nn-1, ]
     xmin = xx[0, ]
 
-    # newly defined variables for solving the eigenvalue problem
+    # new variables for solving the eigenvalue problem
     delta = (xmax - xmin) / (nn - 1)
     aa = 1/(mass*(delta)**2)
 
-    # matrice diagonal and offdiagonal for the eigenvalue problem
-#    ond = aa + pot
-#    ofd = -1/2*aa * np.ones((N-1,), dtype=float)
-
+    # creating matrix for solving the eigenvalue problem
     matrix = np.diag(aa + pot, k=0) +\
         np.diag(-1/2*aa * np.ones((nn - 1,), dtype=float), k=1) +\
         np.diag(-1/2*aa * np.ones((nn - 1,), dtype=float), k=-1)
@@ -160,6 +148,8 @@ def _eigensolver(evalmaxmin, mass, directory):
     eigenval, eigenvec = sp.linalg.eigh(matrix,
                                         eigvals=(int(evalmaxmin[0]-1),
                                                  int(evalmaxmin[1]-1)))
+#                                        additional function arguments
+#                                        which are currently not necessary
 #                                        b=None, lower=True,
 #                                        eigvals_only=False, overwrite_a=False,
 #                                        overwrite_b=False,
@@ -170,31 +160,58 @@ def _eigensolver(evalmaxmin, mass, directory):
     norm2 = np.dot(deltavec, eigenvec2)
 
     norm = 1 / (norm2 ** 0.5)
-    eigenvec_n = np.dot(eigenvec,
+    eigenvec_n = np.dot(eigenvec,  # normalized eigenvector
                         np.diag(np.reshape(norm, (len(eigenval), )), k=0))
 
     # creating the matrix that is supposed to be saved
+    # (x-values and wavefunctions)
     xx_t = np.reshape(xx, (nn, 1))
     wavefuncs = np.hstack((xx_t, eigenvec_n))
 
-    # saving energies and wavefunctions in textdocuments
-    # np.savetxt("energies.dat", eigenval)
-    # np.savetxt("wavefuncs.dat", wavefuncs)
-
-    # calculating related quantities
+    # calculating related quantities (expected x-value and uncertainty)
     expecx = delta*np.dot(xx, eigenvec_n**2)
     expecx2 = delta*np.dot(xx**2, eigenvec_n**2)
     uncer = np.sqrt(expecx2 - expecx**2)
 
-    # creating matrix and saving it in expvalues.dat
+    # creating matrix of these quantities
     expvalues = np.hstack((np.reshape(expecx, (len(eigenval), 1)),
                            np.reshape(uncer, (len(eigenval), 1))))
 
-    # np.savetxt("expvalues.dat", expvalues)
-
     return(eigenval, wavefuncs, expvalues)
 
-# wavefuncs, eigenval = eigensolver(evalmaxmin, mass)
 
+def sgl_solver(directory):
+    """Reads input file and solves the schrodinger equation for the problem.
+       It saves the interpolated potential, the wavefunctions, eigenvalues,
+       expected value and the uncertainty of of the x-coordinate in separate
+       text documents.
 
+    Args:
+        directory: directory where inputfile is saved
+                   and outputfiles will be saved
 
+    Returns:
+        minmax: array with minimum x-value, maximum x-value and number of steps
+        evalmaxmin: first and last eigenvalue to calculate
+        potwithx: array of x-values and potential at that point
+        eigenval: calculated eigenvalues in an array
+
+    """
+
+    # using private inputreader function to extract the necessary data from
+    # the input file
+    mass, minmax, evalmaxmin, iptype, ipoints = _inputreader(directory)
+
+    # using private interpolation function to interpolate the potential from
+    # the given sample points and saving it into a text document
+    potwithx = _interpolation(minmax, ipoints, iptype)
+    np.savetxt(os.path.join(directory, "potential.dat"), potwithx)
+
+    # calculating eigenvalues, -vectors, uncertainty and expected x-value with
+    # the private eigensolver function and saving them into text documents
+    eigenval, wavefuncs, expvalues = _eigensolver(evalmaxmin, mass, directory)
+    np.savetxt(os.path.join(directory, "energies.dat"), eigenval)
+    np.savetxt(os.path.join(directory, "wavefuncs.dat"), wavefuncs)
+    np.savetxt(os.path.join(directory, "expvalues.dat"), expvalues)
+
+    return(minmax, evalmaxmin, potwithx, eigenval)

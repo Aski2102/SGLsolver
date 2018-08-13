@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Executable script for solving the schrodinger equation
+Executable and public module for solving the schrodinger equation
 
-@author: timo
 """
 
 
-def SGLsolver(directory):
+def sgl_solver(directory):
     """Reads input file and solves the schrodinger equation for the problem.
        It saves the interpolated potential, the wavefunctions, eigenvalues,
        expected value and the uncertainty of of the x-coordinate in separate
@@ -14,9 +13,13 @@ def SGLsolver(directory):
 
     Args:
         directory: directory where inputfile is saved
-        and outputfiles will be saved
+                   and outputfiles will be saved
 
     Returns:
+        minmax: array with minimum x-value, maximum x-value and number of steps
+        evalmaxmin: first and last eigenvalue to calculate
+        potwithx: array of x-values and potential at that point
+        eigenval: calculated eigenvalues in an array
 
     """
     import functions.functions
@@ -43,6 +46,9 @@ def visualize(directory, scaling):
     potential, energies, wavefunctions and expected values and makes plots.
 
     Args:
+        directory: directory where inputfile is saved
+                   and outputfiles will be saved
+        scaling: scaling factor for visualization of the wavefunctions
 
     Returns:
 
@@ -53,6 +59,3 @@ def visualize(directory, scaling):
 
     return()
 
-#directory=''
-#SGLsolver(directory)
-#visualizer()

@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SGLsolver API &mdash; SGLsolver 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SGLsolver 0.1 documentation" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-functions">
+<span id="sglsolver-api"></span><h1>SGLsolver API<a class="headerlink" href="#module-functions" title="Permalink to this headline">¶</a></h1>
+<p>Created on Mon Aug  6 03:05:23 2018
+Module for solving the Schrodinger equation
+for a problem given by an input file</p>
+<p>&#64;author: timo</p>
+<span class="target" id="module-executer"></span><p>Executable and public module for solving the schrodinger equation</p>
+<dl class="function">
+<dt id="executer.SGLsolver">
+<code class="descclassname">executer.</code><code class="descname">SGLsolver</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="headerlink" href="#executer.SGLsolver" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Reads input file and solves the schrodinger equation for the problem.</dt>
+<dd>It saves the interpolated potential, the wavefunctions, eigenvalues,
+expected value and the uncertainty of of the x-coordinate in separate
+text documents.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>directory</strong> &#8211; directory where inputfile is saved
+and outputfiles will be saved</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array with minimum x-value, maximum x-value and number of steps
+evalmaxmin: first and last eigenvalue to calculate
+potwithx: array of x-values and potential at that point
+eigenval: calculated eigenvalues in an array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">minmax</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="executer.visualize">
+<code class="descclassname">executer.</code><code class="descname">visualize</code><span class="sig-paren">(</span><em>directory</em>, <em>scaling</em><span class="sig-paren">)</span><a class="headerlink" href="#executer.visualize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualizes the results from the SGLsolver. It reads the textdocuments of
+potential, energies, wavefunctions and expected values and makes plots.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>directory</strong> &#8211; directory where inputfile is saved
+and outputfiles will be saved</li>
+<li><strong>scaling</strong> &#8211; scaling factor for visualization of the wavefunctions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:</p>
+</dd></dl>
+
+<span class="target" id="module-visualizer"></span><p>Visualizer is supposed to visiualize the graphs from the outputfiles
+of the SGLsolver</p>
+<p>&#64;author: charlotte</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Timo Hülsmann and Charlotte Marie Marsh.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/api.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
