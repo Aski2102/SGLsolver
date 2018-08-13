@@ -1,0 +1,4 @@
+.spyderworkspace
+.cache/
+inputfile/
+__pycache__/
