@@ -191,10 +191,16 @@ def sgl_solver(directory):
                    and outputfiles will be saved
 
     Returns:
-        minmax: array with minimum x-value, maximum x-value and number of steps
-        evalmaxmin: first and last eigenvalue to calculate
-        potwithx: array of x-values and potential at that point
-        eigenval: calculated eigenvalues in an array
+        Four arrays with data that is important for testing the solver.
+
+        **minmax:**
+            minimum x-value, maximum x-value and number of steps
+        **evalmaxmin:**
+            first and last eigenvalue to calculate
+        **potwithx:**
+            array of x-values and potential at that point
+        **eigenval:**
+            calculated eigenvalues in an array
 
     """
 

@@ -6,3 +6,5 @@ SGLsolver
 	:maxdepth: 2
 
 	api
+	readme
+	testing

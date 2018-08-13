@@ -151,6 +151,7 @@ def visualize(directory, scaling):
         scaling: scaling factor for visualization of the wavefunctions
 
     Returns:
+        Nothing. The graphic is saved in the directory as *curves.pdf*.
 
     """
 

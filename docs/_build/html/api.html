@@ -25,6 +25,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="SGLsolver 0.1 documentation" href="index.html" />
+    <link rel="next" title="How to use SGLsolver" href="readme.html" />
+    <link rel="prev" title="SGLsolver" href="index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -37,16 +39,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-functions">
-<span id="sglsolver-api"></span><h1>SGLsolver API<a class="headerlink" href="#module-functions" title="Permalink to this headline">¶</a></h1>
-<p>Created on Mon Aug  6 03:05:23 2018
-Module for solving the Schrodinger equation
+  <div class="section" id="module-modules.calculator">
+<span id="sglsolver-api"></span><h1>SGLsolver API<a class="headerlink" href="#module-modules.calculator" title="Permalink to this headline">¶</a></h1>
+<p>Module for solving the Schrodinger equation
 for a problem given by an input file</p>
-<p>&#64;author: timo</p>
-<span class="target" id="module-executer"></span><p>Executable and public module for solving the schrodinger equation</p>
 <dl class="function">
-<dt id="executer.SGLsolver">
-<code class="descclassname">executer.</code><code class="descname">SGLsolver</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="headerlink" href="#executer.SGLsolver" title="Permalink to this definition">¶</a></dt>
+<dt id="modules.calculator.sgl_solver">
+<code class="descclassname">modules.calculator.</code><code class="descname">sgl_solver</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="headerlink" href="#modules.calculator.sgl_solver" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>Reads input file and solves the schrodinger equation for the problem.</dt>
 <dd>It saves the interpolated potential, the wavefunctions, eigenvalues,
@@ -60,41 +59,47 @@ text documents.</dd>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>directory</strong> &#8211; directory where inputfile is saved
 and outputfiles will be saved</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">array with minimum x-value, maximum x-value and number of steps
-evalmaxmin: first and last eigenvalue to calculate
-potwithx: array of x-values and potential at that point
-eigenval: calculated eigenvalues in an array</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">minmax</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Four arrays with data that is important for testing the solver.<dl class="docutils">
+<dt><strong>minmax:</strong></dt>
+<dd>minimum x-value, maximum x-value and number of steps</dd>
+<dt><strong>evalmaxmin:</strong></dt>
+<dd>first and last eigenvalue to calculate</dd>
+<dt><strong>potwithx:</strong></dt>
+<dd>array of x-values and potential at that point</dd>
+<dt><strong>eigenval:</strong></dt>
+<dd>calculated eigenvalues in an array</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
+<span class="target" id="module-modules.visualizer"></span><p>Visualizer is supposed to visiualize the graphs from the outputfiles
+of the SGLsolver</p>
 <dl class="function">
-<dt id="executer.visualize">
-<code class="descclassname">executer.</code><code class="descname">visualize</code><span class="sig-paren">(</span><em>directory</em>, <em>scaling</em><span class="sig-paren">)</span><a class="headerlink" href="#executer.visualize" title="Permalink to this definition">¶</a></dt>
+<dt id="modules.visualizer.visualize">
+<code class="descclassname">modules.visualizer.</code><code class="descname">visualize</code><span class="sig-paren">(</span><em>directory</em>, <em>scaling</em><span class="sig-paren">)</span><a class="headerlink" href="#modules.visualizer.visualize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Visualizes the results from the SGLsolver. It reads the textdocuments of
 potential, energies, wavefunctions and expected values and makes plots.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>directory</strong> &#8211; directory where inputfile is saved
 and outputfiles will be saved</li>
 <li><strong>scaling</strong> &#8211; scaling factor for visualization of the wavefunctions</li>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Nothing. The graphic is saved in the directory as <em>curves.pdf</em>.</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>Returns:</p>
 </dd></dl>
 
-<span class="target" id="module-visualizer"></span><p>Visualizer is supposed to visiualize the graphs from the outputfiles
-of the SGLsolver</p>
-<p>&#64;author: charlotte</p>
 </div>
 
 
@@ -102,10 +107,19 @@ of the SGLsolver</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">SGLsolver API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">How to use SGLsolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing the solver</a></li>
+</ul>
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">SGLsolver</a></li>
+      <li>Next: <a href="readme.html" title="next chapter">How to use SGLsolver</a></li>
   </ul></li>
 </ul>
 </div>

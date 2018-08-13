@@ -2,11 +2,8 @@
 SGLsolver API
 **************
 
-.. automodule:: functions
+.. automodule:: modules.calculator
 	:members:
 
-.. automodule:: executer
-	:members:
-
-.. automodule:: visualizer
+.. automodule:: modules.visualizer
 	:members:
