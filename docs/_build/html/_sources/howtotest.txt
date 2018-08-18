@@ -28,4 +28,4 @@ The test runs some specified schrodinger problems including:
 Running pytest will execute the SGLsolvers functions for solving 
 the schrodinger problem for any case (see above). 
 After solving it, it will compare the calculated results with 
-reference data saved in *enerref.dat* and *potref.dat* .
+reference data saved in *enerref.dat* and *potref.dat*  stored in the *inputfiles* directory.

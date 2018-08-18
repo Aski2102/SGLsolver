@@ -18,14 +18,14 @@ To run the SGLsolver follow the following steps:
 	of your choice. The results will also be saved in this directory.
 	(Explanation on the necessary schrodinger.inp structure in **Inputfile structure**)
 
-3. Execute: **solver.py** (optional arguments: -d [--directory] 'directorypath
+3. Execute: **./solver.py** (optional arguments: -d [--directory] 'directorypath
 			of your input file')
 
 4. Now your outputfiles are saved in the directory.
 
 Optional **visualize your results**:
 
-5. Execute: **visual.py**	 
+5. Execute: **./visual.py**	 
 	(optional arguments:
 
 	* -d [--directory] 'directorypath of your input file'

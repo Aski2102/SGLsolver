@@ -115,7 +115,7 @@ def _visualizer(directory, scaling):
     # and for y.axis as minimum potential/ maximum energy value minus/plus
     # ten/~17 percent of their difference
 
-    plt.tick_params(axis='y', which='both', right=False) # remove ticks
+    plt.tick_params(axis='y', which='both', right=False)  # remove ticks
     plt.tick_params(axis='x', which='both', top=False)
 
     # SECOND plot: energies and uncertainty
@@ -131,10 +131,10 @@ def _visualizer(directory, scaling):
 
     # modify axes appearance
     ax = plt.gca()
-    ax.set_xlim(0, 1.1 * xx[nn-1])
+    ax.set_xlim(0, 1.1 * max(np.absolute(xx)))
     ax.set_ylim(min(pot)-(max(ener)-min(pot))/10,
                 max(ener)+(max(ener)-min(pot))/6)
-    # set x limits from zero to maximum xvalue plus ten percent of it
+    # set x limits from zero to maximum of x-vector plus ten percent of it
     # and y limits same as first plot
 
     plt.tick_params(axis='y', which='both', left=False, right=False,
