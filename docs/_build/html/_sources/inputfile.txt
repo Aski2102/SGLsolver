@@ -2,7 +2,8 @@
 Inputfile structure
 --------------------------------
 
-The inputfile has to have the following structure:
+The inputfile has to have the following structure 
+(please note that all entries have to be in atomic units):
 
 1. The first line contains **mass of the particle** [as float].
 

@@ -1,6 +1,6 @@
 2.0            # mass
 -2.0 2.0 1999  # xMin xMax nPoint
-1 4            # first and last eigenvalue in output
+1 3            # first and last eigenvalue in output
 linear         # interpolation type
 6              # nr. of interpolation points and xy declarations
 -2.0   0.0

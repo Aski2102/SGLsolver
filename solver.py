@@ -8,6 +8,8 @@ by an input file
 import argparse
 from modules.calculator import sgl_solver
 
+# using argument parser to make the sgl_solver function executable from shell
+# with optional input arguments(directory)
 PARSER = argparse.ArgumentParser(description='Executes SGLsolver\
                                               for given input file')
 PARSER.add_argument('-d', '--directory', default='',

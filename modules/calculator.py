@@ -11,6 +11,7 @@ import scipy as sp
 import scipy.interpolate as spip
 
 
+# the underscore defines a function as private
 def _inputreader(directory):
     """Reads input file and saves relevant variables.
 
@@ -25,15 +26,17 @@ def _inputreader(directory):
         ipoints: sample points as array
     """
 
-    # creating the path for reading input file
+    # creating the full path for reading input file
     file = "schrodinger.inp"
     filename = os.path.join(directory, file)
 
-    inputfile = open(filename, "r")
-    data = inputfile.readlines()  # reading input file
+    inputfile = open(filename, "r")  # open file for reading purpose
+    data = inputfile.readlines()  # reading input file linewise, save to array
     inputfile.close()
 
-    # declaring variables
+    # declaring variables from data and saving them to separate arrays
+    # data.split cuts the lines in the arrays at the given symbol
+    # .strip removes whitespace characters
     mass = float(data[0].split("#")[0].strip())  # mass
 
     minmax = np.array(data[1].split(" ")[0:3], dtype=float)
@@ -46,10 +49,11 @@ def _inputreader(directory):
 
     nip = int(data[4].split("#")[0].strip())  # number of interpolation points
 
-    ipoints = np.zeros((int(nip), 2), dtype=float)
+    ipoints = np.zeros((int(nip), 2), dtype=float)  # create array of zeros
     for ii in range(0, int(nip)):    # interpolation points in an array
         data[5+ii] = ' '.join(data[5+ii].split())
         ipoints[ii, :] = np.array(data[5+ii].split(" "), dtype=float)
+        # join sets multiple blankspaces to a single one
 
     return (mass, minmax, evalmaxmin, iptype, ipoints)
 
@@ -67,7 +71,8 @@ def _interpolation(minmax, ipoints, iptype):
 
     """
 
-    # Extracting x and y values from the input file for the interpolation
+    # Extracting x and y values from the input file sample points
+    # saved in ipoints for the interpolation
     xx = ipoints[:, 0]
     yy = ipoints[:, 1]
 
@@ -95,12 +100,13 @@ def _interpolation(minmax, ipoints, iptype):
     else:
         print('Invalid interpolation type.')
 
-    # Changing the row vectors to column vectors and stacking them to a matrice
+    # Transposing row vectors and stacking them to a matrice
     xnew_t = np.reshape(xnew, (int(minmax[2]), 1))
     pot_t = np.reshape(pot, (int(minmax[2]), 1))
 
     potwithx = np.hstack((xnew_t, pot_t))
 
+    # potwithx fulfills the saving file requirements
     return potwithx
 
 
@@ -121,18 +127,18 @@ def _eigensolver(evalmaxmin, mass, directory):
     """
     filename = os.path.join(directory, "potential.dat")
     inputfile = open(filename, "r")
-    data = inputfile.readlines()  # reading input file
+    data = inputfile.readlines()
     inputfile.close()
 
-    # variables that actually come from the other modules
-    nn = np.shape(data)[0]
-    pot = np.zeros((nn, ), dtype=float)
+    # variables that come from the other functions
+    nn = np.shape(data)[0]  # number of discrete points
+    pot = np.zeros((nn, ), dtype=float)  # data preallocation
     xx = np.zeros((nn, ), dtype=float)
     for ii in range(0, nn):    # extracting x-values and potential points
         pot[ii, ] = np.array(data[ii].split(" ")[1], dtype=float)
         xx[ii, ] = np.array(data[ii].split(" ")[0], dtype=float)
 
-    xmax = xx[nn-1, ]
+    xmax = xx[nn-1, ]  # minimum and maximum x-value
     xmin = xx[0, ]
 
     # new variables for solving the eigenvalue problem
@@ -155,8 +161,9 @@ def _eigensolver(evalmaxmin, mass, directory):
 #                                        overwrite_b=False,
 
     # calculating the norm and the normalized eigenvectors
+    # using clever matrix multiplication(np.dot)
     deltavec = delta * np.ones((1, nn), dtype=float)
-    eigenvec2 = eigenvec**2
+    eigenvec2 = eigenvec**2  # the square is executed componentwise
     norm2 = np.dot(deltavec, eigenvec2)
 
     norm = 1 / (norm2 ** 0.5)

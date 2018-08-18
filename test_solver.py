@@ -11,7 +11,7 @@ import pytest
 import numpy as np
 from modules.calculator import sgl_solver
 
-# parametrized tests for all examples
+# parametrized tests for all examples for potential
 @pytest.mark.parametrize("directory", [
     ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/infwell'),
     ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic'),
@@ -42,12 +42,12 @@ def test_potential(directory):
         potexp[ii, :] = np.array(data[ii].split(" "), dtype=float)
 
     # compare reference and calculated data with the allclose function
-    # from the numpy module
+    # from the numpy module (tolerance one percent)
     assert np.allclose(potwithx, potexp, rtol=0.01, atol=0.01,
                        equal_nan=False)
 
 
-# parametrized tests for all examples
+# parametrized tests for all examples for energies
 @pytest.mark.parametrize("directory", [
     ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/infwell'),
     ('/home/charlotte/Abschlussprojekt/SGLsolver/inputfiles/harmonic'),
@@ -83,6 +83,6 @@ def test_energie(directory):
                           (int(evalmaxmin[1] - evalmaxmin[0] + 1), 1))
 
     # compare reference and calculated data with the allclose function
-    # from the numpy module
+    # from the numpy module (tolerance one percent)
     assert np.allclose(eigenval, energieexp, rtol=0.01, atol=0.01,
                        equal_nan=False)

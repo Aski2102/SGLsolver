@@ -7,4 +7,4 @@ SGLsolver
 
 	api
 	readme
-	testing
+	howtotest

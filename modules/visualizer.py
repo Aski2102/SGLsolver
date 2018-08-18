@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Visualizer is supposed to visiualize the graphs from the outputfiles
+Visualizer is supposed to visiualize the data from the outputfiles
 of the SGLsolver
 
 """
@@ -12,11 +12,11 @@ import matplotlib.pyplot as plt
 
 def _visualizer(directory, scaling):
     """Visualizes the results from the SGLsolver. It reads the textdocuments of
-    potential, energies, wavefunctions and expected values and makes plotts.
+    potential, energies, wavefunctions and expected values and makes plots.
 
     Args:
         directory: directory of input files and output file
-        scaling: scaling factor for better visualizing of the wave functions
+        scaling: scaling factor for better visualization of the wave functions
 
     Returns:
 
@@ -25,7 +25,7 @@ def _visualizer(directory, scaling):
     # POTENTIAL
     filename = os.path.join(directory, "potential.dat")
     inputpot = open(filename, "r")
-    potdata = inputpot.readlines()  # reading input file
+    potdata = inputpot.readlines()
     inputpot.close()
 
     # creates arrays of potential and xvalues for plotting
@@ -36,13 +36,13 @@ def _visualizer(directory, scaling):
         pot[ii, ] = np.array(potdata[ii].split(" ")[1], dtype=float)
         xx[ii, ] = np.array(potdata[ii].split(" ")[0], dtype=float)
 
-    # ENERGIE
+    # ENERGY
     filename = os.path.join(directory, "energies.dat")
     inputener = open(filename, "r")
-    enerdata = inputener.readlines()  # reading input file
+    enerdata = inputener.readlines()
     inputener.close()
 
-    # creates array of energie for plotting
+    # creates array of energy values for plotting
     mm = np.shape(enerdata)[0]
     ener = np.zeros((mm, ), dtype=float)
     for ii in range(0, mm):
@@ -51,7 +51,7 @@ def _visualizer(directory, scaling):
     # WAVEFUNCS
     filename = os.path.join(directory, "wavefuncs.dat")
     inputwave = open(filename, "r")
-    wavedata = inputwave.readlines()  # reading input file
+    wavedata = inputwave.readlines()
     inputwave.close()
 
     # creates array of wavefunctions for plotting
@@ -64,7 +64,7 @@ def _visualizer(directory, scaling):
     # EXPVALUES
     filename = os.path.join(directory, "expvalues.dat")
     inputexp = open(filename, "r")
-    expdata = inputexp.readlines()  # reading input file
+    expdata = inputexp.readlines()
     inputexp.close()
 
     # creates arrays of uncertainty and expected xvalues for plotting
@@ -77,7 +77,7 @@ def _visualizer(directory, scaling):
     # PLOTTING
 
     # FIRST plot: potential, energies, wavefunctions and expected xvalues
-    plt.subplot(1, 2, 1)
+    plt.subplot(1, 2, 1)  # for two plots in one figure
     plt.title(r'Potential, eigenstates, $\langle$x$\rangle$', fontsize=14)
 
     plt.xlabel("x [Bohr]", fontsize=14)
@@ -86,7 +86,8 @@ def _visualizer(directory, scaling):
     # add potential
     plt.plot(xx, pot, linewidth=1.5, color='k',
              label='Potential')
-    # add energies
+    # add energies as horizontal lines(hlines)
+    # reaching from one diagram edge to the other
     plt.hlines(ener, xx[0]-(xx[nn-1]-xx[0])/10, xx[nn-1]+(xx[nn-1]-xx[0])/10,
                colors='0.8', linestyles='solid', label='Energies')
 
@@ -99,7 +100,7 @@ def _visualizer(directory, scaling):
         else:
             color = "blue"
         plt.plot(xx, scaling * wave + energy, linewidth=1.0, linestyle="-",
-                 color=color)
+                 color=color)  # scaling is determined by user (default=0.3)
 
     # add expected x-value
     plt.scatter(expxval, ener, c='green', marker='x', s=100, linewidths=1)
@@ -109,8 +110,12 @@ def _visualizer(directory, scaling):
     ax.set_xlim(xx[0]-(xx[nn-1]-xx[0])/10, xx[nn-1]+(xx[nn-1]-xx[0])/10)
     ax.set_ylim(min(pot)-(max(ener)-min(pot))/10,
                 max(ener)+(max(ener)-min(pot))/6)
+    # limits for x-axis are set as xmin/max minus/plus ten percent
+    # of potential width
+    # and for y.axis as minimum potential/ maximum energy value minus/plus
+    # ten/~17 percent of their difference
 
-    plt.tick_params(axis='y', which='both', right=False)
+    plt.tick_params(axis='y', which='both', right=False) # remove ticks
     plt.tick_params(axis='x', which='both', top=False)
 
     # SECOND plot: energies and uncertainty
@@ -129,6 +134,8 @@ def _visualizer(directory, scaling):
     ax.set_xlim(0, 1.1 * xx[nn-1])
     ax.set_ylim(min(pot)-(max(ener)-min(pot))/10,
                 max(ener)+(max(ener)-min(pot))/6)
+    # set x limits from zero to maximum xvalue plus ten percent of it
+    # and y limits same as first plot
 
     plt.tick_params(axis='y', which='both', left=False, right=False,
                     labelleft=False)
